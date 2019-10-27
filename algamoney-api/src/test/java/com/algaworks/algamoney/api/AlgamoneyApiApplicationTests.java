@@ -1,4 +1,4 @@
-package com.algamoney.api.algamoney.api;
+package com.algaworks.algamoney.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

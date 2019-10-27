@@ -1,4 +1,4 @@
-package com.algamoney.api.algamoney.api;
+package com.algaworks.algamoney.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
