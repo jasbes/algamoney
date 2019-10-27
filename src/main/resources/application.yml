@@ -1,0 +1,8 @@
+spring:
+  jpa:
+    database: MYSQL
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost/algamoney?createDatabaseIfNotExist=true&useSSL=false
+    username: root
+    password: password
