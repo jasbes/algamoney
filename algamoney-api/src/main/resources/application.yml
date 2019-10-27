@@ -6,3 +6,6 @@ spring:
     url: jdbc:mysql://localhost/algamoney?createDatabaseIfNotExist=true&useSSL=false
     username: root
     password: password
+  jackson:
+    deserialization:
+      fail_on_unknown_properties: true

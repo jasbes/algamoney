@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class CategoryResource {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> add(@RequestBody CategoryDTO category, HttpServletResponse response) {
+    public ResponseEntity<CategoryDTO> add(@RequestBody @Valid CategoryDTO category, HttpServletResponse response) {
         CategoryDTO savedCategory =  categoryService.add(category);
 
         URI uri = ServletUriComponentsBuilder
