@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +39,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO findById(Long id) {
-        return categoryConverter.convert(categoryRepository.getOne(id));
+    public Optional<CategoryDTO> findById(Long id) {
+        return categoryRepository
+                .findById(id).map(categoryConverter::convert);
     }
 }

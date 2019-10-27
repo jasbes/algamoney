@@ -43,7 +43,9 @@ public class CategoryResource {
     }
 
     @GetMapping("/{id}")
-    public CategoryDTO getById(@PathVariable("id") Long id) {
-        return categoryService.findById(id);
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        return categoryService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

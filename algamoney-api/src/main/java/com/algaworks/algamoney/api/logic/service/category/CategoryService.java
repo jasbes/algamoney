@@ -3,6 +3,7 @@ package com.algaworks.algamoney.api.logic.service.category;
 import com.algaworks.algamoney.api.logic.bean.CategoryDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryService {
 
@@ -10,5 +11,5 @@ public interface CategoryService {
 
     CategoryDTO add(CategoryDTO category);
 
-    CategoryDTO findById(Long id);
+    Optional<CategoryDTO> findById(Long id);
 }
