@@ -1,13 +1,13 @@
-package com.algaworks.algamoney;
+package com.algamoney.api.algamoney.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AlgamoneyApplication {
+public class AlgamoneyApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AlgamoneyApplication.class, args);
+        SpringApplication.run(AlgamoneyApiApplication.class, args);
     }
 
 }
