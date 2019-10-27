@@ -5,6 +5,7 @@ import com.algaworks.algamoney.api.logic.bean.CategoryDTO;
 import com.algaworks.algamoney.api.logic.converter.CategoryConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,5 +30,10 @@ public class CategoryServiceImpl implements CategoryService {
                 .stream()
                 .map(categoryConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryDTO add(@RequestBody CategoryDTO category) {
+        return categoryConverter.convert(categoryRepository.save(categoryConverter.convert(category)));
     }
 }
