@@ -36,4 +36,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO add(@RequestBody CategoryDTO category) {
         return categoryConverter.convert(categoryRepository.save(categoryConverter.convert(category)));
     }
+
+    @Override
+    public CategoryDTO findById(Long id) {
+        return categoryConverter.convert(categoryRepository.getOne(id));
+    }
 }

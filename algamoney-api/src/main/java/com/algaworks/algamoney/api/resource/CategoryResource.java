@@ -3,7 +3,7 @@ package com.algaworks.algamoney.api.resource;
 import com.algaworks.algamoney.api.logic.bean.CategoryDTO;
 import com.algaworks.algamoney.api.logic.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,16 +28,22 @@ public class CategoryResource {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void add(@RequestBody CategoryDTO category, HttpServletResponse response) {
+    public ResponseEntity<CategoryDTO> add(@RequestBody CategoryDTO category, HttpServletResponse response) {
         CategoryDTO savedCategory =  categoryService.add(category);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
-                .path("/{code}")
+                .path("/{id}")
                 .buildAndExpand(savedCategory.getId())
                 .toUri();
 
         response.setHeader("Location", uri.toASCIIString());
+
+        return ResponseEntity.created(uri).body(savedCategory);
+    }
+
+    @GetMapping("/{id}")
+    public CategoryDTO getById(@PathVariable("id") Long id) {
+        return categoryService.findById(id);
     }
 }
