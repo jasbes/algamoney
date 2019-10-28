@@ -9,9 +9,9 @@ import javax.persistence.*;
 @Table(name = "client")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Builder
 @EqualsAndHashCode(of = {"id"})
-@ToString
 public class ClientEntity {
 
     @Id

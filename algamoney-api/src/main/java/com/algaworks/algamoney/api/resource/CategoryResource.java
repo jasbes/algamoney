@@ -1,15 +1,16 @@
 package com.algaworks.algamoney.api.resource;
 
+import com.algaworks.algamoney.api.event.ResourceCreatedEvent;
 import com.algaworks.algamoney.api.logic.bean.CategoryDTO;
 import com.algaworks.algamoney.api.logic.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,9 +19,12 @@ public class CategoryResource {
 
     private CategoryService categoryService;
 
+    private ApplicationEventPublisher publisher;
+
     @Autowired
-    public CategoryResource(CategoryService categoryService) {
+    public CategoryResource(CategoryService categoryService, ApplicationEventPublisher publisher) {
         this.categoryService = categoryService;
+        this.publisher = publisher;
     }
 
     @GetMapping
@@ -32,15 +36,9 @@ public class CategoryResource {
     public ResponseEntity<CategoryDTO> add(@RequestBody @Valid CategoryDTO category, HttpServletResponse response) {
         CategoryDTO savedCategory =  categoryService.add(category);
 
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequestUri()
-                .path("/{id}")
-                .buildAndExpand(savedCategory.getId())
-                .toUri();
+        publisher.publishEvent(new ResourceCreatedEvent(this, response, savedCategory.getId()));
 
-        response.setHeader("Location", uri.toASCIIString());
-
-        return ResponseEntity.created(uri).body(savedCategory);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
     @GetMapping("/{id}")
