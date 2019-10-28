@@ -1,18 +1,18 @@
 package com.algaworks.algamoney.api.data.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "category")
-@Getter
-@Setter
+@Table(name = "client")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @EqualsAndHashCode(of = {"id"})
 @ToString
-public class CategoryEntity {
+public class ClientEntity {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
@@ -21,4 +21,11 @@ public class CategoryEntity {
 
     @Column(name = "name")
     private String name;
+
+    @Embedded
+    private Address address;
+
+    @Column(name = "active")
+    @Type(type="yes_no")
+    private Boolean active;
 }
