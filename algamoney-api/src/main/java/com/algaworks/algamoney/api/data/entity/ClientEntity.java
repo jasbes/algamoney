@@ -1,7 +1,6 @@
 package com.algaworks.algamoney.api.data.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -26,6 +25,5 @@ public class ClientEntity {
     private Address address;
 
     @Column(name = "active")
-    @Type(type="yes_no")
     private Boolean active;
 }

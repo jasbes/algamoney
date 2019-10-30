@@ -26,7 +26,7 @@ public class ClientResource {
         this.publisher = publisher;
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity add(@RequestBody @Valid ClientDTO clientDTO, HttpServletResponse response) {
         ClientDTO savedClient = clientService.add(clientDTO);
 
@@ -35,10 +35,31 @@ public class ClientResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
     }
 
+    @PutMapping
+    public ResponseEntity update(@RequestBody @Valid ClientDTO clientDTO, HttpServletResponse response) {
+        ClientDTO savedClient = clientService.update(clientDTO);
+
+        publisher.publishEvent(new ResourceCreatedEvent(this, response, savedClient.getId()));
+
+        return ResponseEntity.ok().body(savedClient);
+    }
+
+    @PutMapping("/{id}/active")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setActive(@PathVariable("id") Long id, @RequestBody Boolean isActive) {
+        clientService.setActive(id, isActive);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> findById(@PathVariable("id") Long id) {
         return clientService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remove(@PathVariable("id") Long id) {
+        clientService.remove(id);
     }
 }

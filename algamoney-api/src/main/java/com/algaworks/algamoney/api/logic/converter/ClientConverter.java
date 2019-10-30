@@ -13,31 +13,33 @@ public class ClientConverter implements Converter<ClientEntity, ClientDTO> {
 
     @Override
     public ClientDTO convert(ClientEntity clientEntity) {
+        AddressDTO addressDTO = null;
+        if(clientEntity.getAddress() != null) {
+            addressDTO = AddressDTO
+                            .builder()
+                            .street(clientEntity.getAddress().getStreet())
+                            .number(clientEntity.getAddress().getNumber())
+                            .complement(clientEntity.getAddress().getComplement())
+                            .cp(clientEntity.getAddress().getCp())
+                            .city(clientEntity.getAddress().getCity())
+                            .state(clientEntity.getAddress().getState())
+                            .build();
+        }
+
         return ClientDTO
                 .builder()
                 .id(clientEntity.getId())
                 .name(clientEntity.getName())
                 .active(clientEntity.getActive())
-                .address(AddressDTO
-                        .builder()
-                        .street(clientEntity.getAddress().getStreet())
-                        .number(clientEntity.getAddress().getNumber())
-                        .complement(clientEntity.getAddress().getComplement())
-                        .cp(clientEntity.getAddress().getCp())
-                        .city(clientEntity.getAddress().getCity())
-                        .state(clientEntity.getAddress().getState())
-                        .build()
-                )
+                .address(addressDTO)
                 .build();
     }
 
     public ClientEntity convert(ClientDTO clientDTO) {
-        return ClientEntity
-                .builder()
-                .id(clientDTO.getId())
-                .name(clientDTO.getName())
-                .active(clientDTO.getActive())
-                .address(Address
+        Address address = null;
+
+        if(clientDTO.getAddress() != null) {
+            address = Address
                         .builder()
                         .street(clientDTO.getAddress().getStreet())
                         .number(clientDTO.getAddress().getNumber())
@@ -45,8 +47,15 @@ public class ClientConverter implements Converter<ClientEntity, ClientDTO> {
                         .cp(clientDTO.getAddress().getCp())
                         .city(clientDTO.getAddress().getCity())
                         .state(clientDTO.getAddress().getState())
-                        .build()
-                )
+                        .build();
+        }
+
+        return ClientEntity
+                .builder()
+                .id(clientDTO.getId())
+                .name(clientDTO.getName())
+                .active(clientDTO.getActive())
+                .address(address)
                 .build();
     }
 }

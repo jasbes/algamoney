@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -30,7 +32,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         String messageUser = messageSource.getMessage("unknown.property", null, Locale.getDefault());
-        String debugMessage = ex.getCause().toString();
+        String debugMessage = ex.getCause() != null? ex.getCause().toString() : ex.toString();
         return handleExceptionInternal(ex, List.of(new Error(messageUser, debugMessage)), headers, HttpStatus.BAD_REQUEST, request);
     }
 
@@ -38,6 +40,13 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<Error> errors = getErrors(ex.getBindingResult());
         return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler({EmptyResultDataAccessException.class})
+    public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
+        String messageUser = messageSource.getMessage("client.notfound", null, Locale.getDefault());
+        String debugMessage = ex.getCause() != null? ex.getCause().toString() : ex.toString();
+        return handleExceptionInternal(ex, List.of(new Error(messageUser, debugMessage)), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     private List<Error> getErrors(BindingResult bindResult) {
