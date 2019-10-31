@@ -36,7 +36,7 @@ public class EntryEntity {
     private BigDecimal amount;
 
     @Column(name = "comment")
-    private LocalDate comment;
+    private String comment;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
