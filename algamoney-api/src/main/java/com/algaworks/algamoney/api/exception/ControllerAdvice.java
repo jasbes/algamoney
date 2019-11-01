@@ -3,8 +3,10 @@ package com.algaworks.algamoney.api.exception;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,20 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
         String messageUser = messageSource.getMessage("client.notfound", null, Locale.getDefault());
         String debugMessage = ex.getCause() != null? ex.getCause().toString() : ex.toString();
         return handleExceptionInternal(ex, List.of(new Error(messageUser, debugMessage)), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+        String messageUser = messageSource.getMessage("resource.not-allowed", null, Locale.getDefault());
+        String debugMessage = ExceptionUtils.getRootCauseMessage(ex);
+        return handleExceptionInternal(ex, List.of(new Error(messageUser, debugMessage)), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler({ClientNotFoundOrInactiveException.class})
+    public ResponseEntity<Object> handleClientNotFoundOrInactiveException(ClientNotFoundOrInactiveException ex) {
+        String messageUser = messageSource.getMessage("resource.client.invalid", null, Locale.getDefault());
+        String debugMessage = ExceptionUtils.getRootCauseMessage(ex);
+        return ResponseEntity.badRequest().body(List.of(new Error(messageUser, debugMessage)));
     }
 
     private List<Error> getErrors(BindingResult bindResult) {

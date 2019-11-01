@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public class EntryResource {
     }
 
     @PostMapping
-    public ResponseEntity<EntryDTO> add(@RequestBody EntryDTO entryDTO, HttpServletResponse response) {
+    public ResponseEntity<EntryDTO> add(@RequestBody @Valid EntryDTO entryDTO, HttpServletResponse response) {
         EntryDTO savedEntry = entryService.add(entryDTO);
 
         publisher.publishEvent(new ResourceCreatedEvent(this, response, savedEntry.getId()));
