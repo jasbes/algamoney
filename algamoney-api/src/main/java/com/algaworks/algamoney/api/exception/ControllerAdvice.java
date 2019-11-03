@@ -46,7 +46,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({EmptyResultDataAccessException.class})
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request) {
-        String messageUser = messageSource.getMessage("client.notfound", null, Locale.getDefault());
+        String messageUser = messageSource.getMessage("resource.not-found", null, Locale.getDefault());
         String debugMessage = ex.getCause() != null? ex.getCause().toString() : ex.toString();
         return handleExceptionInternal(ex, List.of(new Error(messageUser, debugMessage)), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
