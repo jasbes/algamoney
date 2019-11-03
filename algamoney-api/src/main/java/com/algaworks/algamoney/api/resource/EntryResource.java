@@ -6,13 +6,14 @@ import com.algaworks.algamoney.api.logic.bean.EntryDTO;
 import com.algaworks.algamoney.api.logic.service.entry.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author jsilva on 31/10/2019
@@ -32,8 +33,8 @@ public class EntryResource {
     }
 
     @GetMapping
-    public List<EntryDTO> listAll(EntryFilter filter) {
-        return entryService.listAll(filter);
+    public Page<EntryDTO> listAll(EntryFilter filter, Pageable pageable) {
+        return entryService.search(filter, pageable);
     }
 
     @PostMapping
