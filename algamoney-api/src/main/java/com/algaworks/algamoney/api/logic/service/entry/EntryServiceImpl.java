@@ -3,6 +3,8 @@ package com.algaworks.algamoney.api.logic.service.entry;
 import com.algaworks.algamoney.api.data.entity.ClientEntity;
 import com.algaworks.algamoney.api.data.repository.ClientRepository;
 import com.algaworks.algamoney.api.data.repository.EntryRepository;
+import com.algaworks.algamoney.api.data.search.filter.EntryFilter;
+import com.algaworks.algamoney.api.data.search.specification.EntrySpecification;
 import com.algaworks.algamoney.api.exception.ClientNotFoundOrInactiveException;
 import com.algaworks.algamoney.api.logic.bean.EntryDTO;
 import com.algaworks.algamoney.api.logic.converter.EntryConverter;
@@ -40,11 +42,16 @@ public class EntryServiceImpl implements EntryService {
     }
 
     @Override
-    public List<EntryDTO> listAll() {
+    public List<EntryDTO> listAll(EntryFilter filter) {
         return entryRepository
-                .findAll()
+                .findAll(new EntrySpecification(filter))
                 .stream()
                 .map(entryConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void remove(Long id) {
+        entryRepository.deleteById(id);
     }
 }

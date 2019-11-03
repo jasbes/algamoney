@@ -1,5 +1,6 @@
 package com.algaworks.algamoney.api.resource;
 
+import com.algaworks.algamoney.api.data.search.filter.EntryFilter;
 import com.algaworks.algamoney.api.event.ResourceCreatedEvent;
 import com.algaworks.algamoney.api.logic.bean.EntryDTO;
 import com.algaworks.algamoney.api.logic.service.entry.EntryService;
@@ -31,8 +32,8 @@ public class EntryResource {
     }
 
     @GetMapping
-    public List<EntryDTO> listAll() {
-        return entryService.listAll();
+    public List<EntryDTO> listAll(EntryFilter filter) {
+        return entryService.listAll(filter);
     }
 
     @PostMapping
@@ -42,5 +43,11 @@ public class EntryResource {
         publisher.publishEvent(new ResourceCreatedEvent(this, response, savedEntry.getId()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEntry);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remove(@PathVariable("id") Long id) {
+        entryService.remove(id);
     }
 }

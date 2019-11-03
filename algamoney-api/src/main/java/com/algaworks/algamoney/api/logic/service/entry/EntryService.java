@@ -1,5 +1,6 @@
 package com.algaworks.algamoney.api.logic.service.entry;
 
+import com.algaworks.algamoney.api.data.search.filter.EntryFilter;
 import com.algaworks.algamoney.api.logic.bean.EntryDTO;
 
 import java.util.List;
@@ -11,5 +12,7 @@ public interface EntryService {
 
     EntryDTO add(EntryDTO entryDTO);
 
-    List<EntryDTO> listAll();
+    List<EntryDTO> listAll(EntryFilter filter);
+
+    void remove(Long id);
 }
