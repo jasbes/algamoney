@@ -28,6 +28,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <commons.lang.version>3.4</commons.lang.version>
+        <oauth.version>2.3.7.RELEASE</oauth.version>
+        <spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
     </properties>
 
     <build>
