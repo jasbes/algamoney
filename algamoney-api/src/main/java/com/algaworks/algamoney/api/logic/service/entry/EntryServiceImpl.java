@@ -10,12 +10,8 @@ import com.algaworks.algamoney.api.logic.bean.EntryDTO;
 import com.algaworks.algamoney.api.logic.converter.EntryConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author jsilva on 31/10/2019
@@ -46,13 +42,9 @@ public class EntryServiceImpl implements EntryService {
 
     @Override
     public Page<EntryDTO> search(EntryFilter filter, Pageable pageable) {
-        List<EntryDTO> entries = entryRepository
+        return entryRepository
                 .findAll(new EntrySpecification(filter), pageable)
-                .stream()
-                .map(entryConverter::convert)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(entries, pageable, entries.size());
+                .map(entryConverter::convert);
     }
 
     @Override

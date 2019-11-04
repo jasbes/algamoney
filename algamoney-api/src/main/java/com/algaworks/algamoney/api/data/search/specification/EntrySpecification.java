@@ -22,7 +22,7 @@ public class EntrySpecification implements Specification<EntryEntity> {
 
     @Override
     public Predicate toPredicate(Root<EntryEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-        Predicate predicate = null;
+        Predicate predicate = criteriaBuilder.conjunction();
         if (!StringUtils.isEmpty(filter.getDescription())) {
             predicate = criteriaBuilder.and(criteriaBuilder.like(criteriaBuilder.lower(root.get(EntryEntity_.DESCRIPTION)), "%" + filter.getDescription().toLowerCase() + "%"));
         }
