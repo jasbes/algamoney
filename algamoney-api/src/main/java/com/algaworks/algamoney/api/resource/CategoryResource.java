@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,11 +29,13 @@ public class CategoryResource {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_PESQUISAR_CATEGORIA')")
     public List<CategoryDTO> listAll() {
         return categoryService.listAll();
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_CADASTRAR_CATEGORIA')")
     public ResponseEntity<CategoryDTO> add(@RequestBody @Valid CategoryDTO category, HttpServletResponse response) {
         CategoryDTO savedCategory =  categoryService.add(category);
 
@@ -42,6 +45,7 @@ public class CategoryResource {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_PESQUISAR_CATEGORIA')")
     public ResponseEntity getById(@PathVariable("id") Long id) {
         return categoryService.findById(id)
                 .map(ResponseEntity::ok)
